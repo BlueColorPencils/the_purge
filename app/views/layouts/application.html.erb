@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Namedatabase</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+  <% if current_user %>
+    <ul class="nav navbar-nav pull-right">
+      <li><%= image_tag current_user.image, alt: current_user.first_name %></li>
+      <li><%= link_to 'Log Out', logout_path, method: :delete %></li>
+    </ul>
+  <% else %>
+    <ul class="nav navbar-nav">
+      <li><%= link_to 'Facebook', '/auth/facebook' %></li>
+    </ul>
+  <% end %>
+
+
+<%= yield %>
+
+</body>
+</html>
