@@ -1,20 +1,40 @@
 
 
-<% if current_user %>
-  <div class="page-header">
-    <h1>Here is some info about you...</h1>
-  </div>
+<% if current_user && !params["query"].nil?  %>
   <div class="panel panel-default">
     <div class="panel-body">
-      <ul>
+      <!-- <ul>
         <li><strong>Nombre:</strong> <%= current_user.name %></li>
 
         <li><strong>Provider:</strong> <%= current_user.provider %></li>
         <li><strong>uID:</strong> <%= current_user.uid %></li>
         <li><strong>Avatar URL:</strong> <%= current_user.picture %></li>
         <li><strong>m:</strong> <%= @posts_including_person %></li>
-        <!-- <li><strong>YO</strong> <%= current_user.oauth_token %></li> -->
-      </ul>
+        <li><strong>YO</strong> <%= current_user.oauth_token %></li>
+      </ul> -->
+      <% @posts_including_person.count.times do |num| %>
+      <div class="postcontainer">
+        <%= image_tag "https://graph.facebook.com/#{@posts_including_person[num]["from"]["id"]}/picture?type=square" %>
+        <%= @posts_including_person[num]["from"]["name"] %>
+
+        <% if !@posts_including_person[num]["with_tags"].nil? %>
+          <% with_tag = "with " %>
+          <% @posts_including_person[num]["with_tags"]["data"].count.times do |count| %>
+            <% with_tag += "#{@posts_including_person[num]["with_tags"]["data"][count]["name"]}, "%>
+            <%end%>
+            <%= with_tag.chomp(", ") %>
+        <%end%>
+
+         <%= link_to "Edit 📝", @posts_including_person[num]["permalink_url"] %>
+
+        <br />
+        <%= @posts_including_person[num]["message"] %>
+        <br />
+        <%= image_tag @posts_including_person[num]["picture"] %>
+
+      </div>
+      <br />
+      <%end%>
     </div>
   </div>
 <% else %>
