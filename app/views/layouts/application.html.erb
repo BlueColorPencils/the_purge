@@ -1,37 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Namedatabase</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <title>ThePurge</title>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
+
 </head>
 <body>
 
-  <% if current_user %>
-    <ul class="nav navbar-nav pull-right">
+<main class="maincontainer">
+  <nav class="navbar navbar-default">
+    <div class="navbar-brand">THE PURGE</div>
+      <ul class="nav navbar-nav navbar-left">
+        <li class=""><%= link_to "Home", root_path %></li>
 
-      <li class="search">
-      <%= form_tag(controller: "sessions", action: "new_search", method: "post") do %>
-        <div class=class="navbar-form navbar-left">
-          <%= text_field_tag "query"%>
-        </div>
-      </li>
-        <li class="search">
-          <%= submit_tag"🔍", class: 'btn-btn-primary' %>
-        <% end %>
-        </li>
+        <% if current_user %>
+          <li class="search">
+          <%= form_tag(controller: "sessions", action: "new_search", method: "post") do %>
+            <div class=class="navbar-form navbar-left">
+              <%= text_field_tag "query"%>
+            </div>
+          </li>
+            <li class="search">
+              <%= submit_tag"🔍", class: 'btn-btn-primary' %>
+            <% end %>
+            </li>
+        <%end%>
+        <!-- </form> -->
+      </ul>
 
-      <li><%= image_tag current_user.picture, alt: current_user.name %></li>
-      <li><%= link_to 'Log Out', logout_path, method: :delete %></li>
+        <ul class="nav navbar-nav navbar-right">
+      <% if current_user %>
+        <li class="hi-user"><%=  "Hi #{ current_user.name }!" if current_user %> </li>
+        <li><%= image_tag "#{current_user.picture}", class: "nav-pics" %></li>
+        <li><%= link_to "Profile", "        https://www.facebook.com/#{current_user.uid}" %></li>
+
+        <li><%= link_to "Sign Out", logout_path, method: :delete %></li>
+      <%end%>
+
+
+
+      <% unless current_user %>
+        <li class="hi-user"><%= "Guest"  %></li>
+        <!-- <li><%= image_tag "spotify.jpg", class: "nav-pics" %></li> -->
+        <li><%= link_to 'Sign In', '/auth/facebook' %></li>
+      <%end%>
     </ul>
-  <% else %>
-    <ul class="nav navbar-nav">
-      <li><%= link_to 'Facebook', '/auth/facebook' %></li>
-    </ul>
-  <% end %>
+  </nav>
 
-
+<p>
+  Search for a person, place, or thing in the search bar to find all facebook posts on your timeline containing that query. Click on the edit button to redirect to Facebook. Delete or hide the post at your own disgression.
+</p>
 <%= yield %>
 
 </body>

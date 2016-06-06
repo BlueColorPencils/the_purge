@@ -3,15 +3,6 @@
 <% if current_user && !params["query"].nil?  %>
   <div class="panel panel-default">
     <div class="panel-body">
-      <!-- <ul>
-        <li><strong>Nombre:</strong> <%= current_user.name %></li>
-
-        <li><strong>Provider:</strong> <%= current_user.provider %></li>
-        <li><strong>uID:</strong> <%= current_user.uid %></li>
-        <li><strong>Avatar URL:</strong> <%= current_user.picture %></li>
-        <li><strong>m:</strong> <%= @posts_including_person %></li>
-        <li><strong>YO</strong> <%= current_user.oauth_token %></li>
-      </ul> -->
       <% @posts_including_person.count.times do |num| %>
       <div class="postcontainer">
         <%= image_tag "https://graph.facebook.com/#{@posts_including_person[num]["from"]["id"]}/picture?type=square" %>
@@ -37,6 +28,5 @@
       <%end%>
     </div>
   </div>
-<% else %>
-  Welcome!
+
 <% end %>
