@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   get "/auth/:provider/callback" => "sessions#create"
   delete '/logout', to: 'sessions#destroy'
+  post 'search/' => "sessions#new_search"
   # Example of regular route:
 
   # You can have the root of your site routed with "root"

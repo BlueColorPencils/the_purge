@@ -6,8 +6,9 @@ class User < ActiveRecord::Base
   def self.find_or_create_from_omniauth(auth_hash)
     user = self.find_by(uid: auth_hash["uid"], provider: auth_hash["provider"])
     if !user.nil?
-      User.update(oauth_token: auth_hash["credentials"]["token"])
-      User.update(oauth_expires_at: Time.at(auth_hash["credentials"]["expires_at"]))
+      binding.pry
+      user.update(oauth_token: "#{auth_hash["credentials"]["token"]}")
+      user.update(oauth_expires_at: Time.at(auth_hash["credentials"]["expires_at"]))
       return user
     else
       user = User.new

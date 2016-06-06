@@ -10,7 +10,19 @@
 
   <% if current_user %>
     <ul class="nav navbar-nav pull-right">
-      <li><%= image_tag current_user.image, alt: current_user.first_name %></li>
+
+      <li class="search">
+      <%= form_tag(controller: "sessions", action: "new_search", method: "post") do %>
+        <div class=class="navbar-form navbar-left">
+          <%= text_field_tag "query"%>
+        </div>
+      </li>
+        <li class="search">
+          <%= submit_tag"🔍", class: 'btn-btn-primary' %>
+        <% end %>
+        </li>
+
+      <li><%= image_tag current_user.picture, alt: current_user.name %></li>
       <li><%= link_to 'Log Out', logout_path, method: :delete %></li>
     </ul>
   <% else %>
