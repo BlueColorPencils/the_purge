@@ -1,32 +1,108 @@
 
 
 <% if current_user && !params["query"].nil?  %>
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <% @posts_including_person.count.times do |num| %>
-      <div class="postcontainer">
-        <%= image_tag "https://graph.facebook.com/#{@posts_including_person[num]["from"]["id"]}/picture?type=square" %>
-        <%= @posts_including_person[num]["from"]["name"] %>
+  <!-- <div class="panel panel-default"> -->
+  <div class="panel-body">
+    <% @posts_including_person.count.times do |num| %>
+      <div class="panel panel-default">
 
-        <% if !@posts_including_person[num]["with_tags"].nil? %>
-          <% with_tag = "with " %>
-          <% @posts_including_person[num]["with_tags"]["data"].count.times do |count| %>
-            <% with_tag += "#{@posts_including_person[num]["with_tags"]["data"][count]["name"]}, "%>
+        <div class="insidepost">
+          <div class="profpic">
+            <%= image_tag "https://graph.facebook.com/#{@posts_including_person[num]["from"]["id"]}/picture?type=square" %>
+          </div>
+
+          <div class="namecontainer">
+            <div class="name">
+              <%= @posts_including_person[num]["from"]["name"] %>
+            </div>
+
+            <!-- <% if !@posts_including_person[num]["with_tags"].nil? %> -->
+              <!-- <p class="with">with</p> -->
+              <!-- <% with_tag = "" %> -->
+              <!-- <% @posts_including_person[num]["with_tags"]["data"].count.times do |count| %>
+                <% with_tag += "#{@posts_including_person[num]["with_tags"]["data"][count]["name"]}, "%>
+              <%end%> -->
+
+              <!-- <p class="withperson"><%= with_tag.chomp(", ") %></p> -->
+            <!-- <%end%> -->
+
+            <%unless @posts_including_person[num]["story"].nil? %>
+              <p class="with">
+                <% shared = @posts_including_person[num]["story"]%>
+                <% shared.slice!(current_user.name) %>
+                <%= shared.chomp('.') %>
+              </p>
             <%end%>
-            <%= with_tag.chomp(", ") %>
+
+            <div class="edit">
+              <%= link_to "Edit 📝", @posts_including_person[num]["permalink_url"] %>
+            </div>
+          </div>
+
+        </div>
+
+        <% x = DateTime.parse("#{@posts_including_person[num]["created_time"]}") %>
+        <p class = "date">
+          <%= x.strftime("%b %-d, %Y at %-l:%M%P") %>
+        </p>
+
+        <br />
+        <p class="message">
+          <%= @posts_including_person[num]["message"] %>
+        </p>
+        <br />
+
+
+        <%if @posts_including_person[num]["type"] == "link"  %>
+          <p class="postlink">
+            <%= @posts_including_person[num]["attachments"]["data"][0]["title"] %>
+            <br />
+            <br />
+            <%= @posts_including_person[num]["attachments"]["data"][0]["description"] %>
+            <br />
+            <br />
+          </p>
+        <%else%>
+          <div class="postpicture">
+            <%= image_tag(@posts_including_person[num]["full_picture"])  %>
+          </div>
         <%end%>
 
-         <%= link_to "Edit 📝", @posts_including_person[num]["permalink_url"] %>
+        <% unless @posts_including_person[num]["comments"].nil? %>
+          <div class="comments">
+            <% @comments = @posts_including_person[num]["comments"]["data"] %>
 
-        <br />
-        <%= @posts_including_person[num]["message"] %>
-        <br />
-        <%= image_tag @posts_including_person[num]["picture"] %>
+            <% @comments.count.times do |x| %>
+              <div class="commentcontainer">
+
+                <% id = @comments[x]["from"]["id"] %>
+                <div class="commentpics">
+                  <%= image_tag "https://graph.facebook.com/#{id}/picture?type=square" %>
+                </div>
+
+                <div class="commentname">
+                  <%= @comments[x]["from"]["name"] %>
+                </div>
+
+                <div class="commentmessage">
+                  <%= @comments[x]["message"] %>
+                  <% x = DateTime.parse("#{@comments[x]["created_time"]}") %>
+                </div>
+
+                <p class = "date">
+                  <%= x.strftime("%b %-d, %Y at %-l:%M%P") %>
+                </p>
+
+                <br />
+              </div>
+            <%end%>
+
+          </div>
+        <%end%>
 
       </div>
       <br />
-      <%end%>
-    </div>
+      <br />
+    <%end%>
   </div>
-
 <% end %>

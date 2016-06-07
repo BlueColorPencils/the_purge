@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       auth_hash = request.env['omniauth.auth']
 
       @graph = Koala::Facebook::API.new(current_user.oauth_token)
-      @timeline = @graph.get_object("me?fields=feed.limit(2000){from,message,permalink_url,with_tags,picture,created_time,type,comments.limit(100)}")
+      @timeline = @graph.get_object("me?fields=feed.limit(2000){from,message,permalink_url,with_tags,full_picture,attachments,created_time,story,type,comments.limit(100)}")
 
       @posts = @timeline["feed"]["data"]
       @posts_including_person = {}
